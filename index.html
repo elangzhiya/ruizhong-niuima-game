@@ -2,7 +2,10 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#2f6bff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>重生之我在瑞众保险当牛马</title>
 <style>
 :root{
@@ -137,10 +140,116 @@ body{
 .btn-mini{border:0;background:var(--red-l);color:var(--red);border-radius:8px;
   padding:5px 12px;font-size:11px;cursor:pointer;font-weight:700;font-family:inherit}
 
-@media(max-width:560px){
-  .res-grid,.attr-grid{grid-template-columns:repeat(2,1fr)}
-  .act-grid{grid-template-columns:repeat(2,1fr)}
-  .hero h1{font-size:18px}
+/* bottom action bar (mobile only) */
+.bottom-bar{display:none}
+
+/* 触摸友好：全局点击高亮与点击延迟 */
+*{ -webkit-tap-highlight-color:transparent; }
+button{ touch-action:manipulation; }
+
+@media(max-width:640px){
+  body{
+    padding:10px 10px calc(84px + env(safe-area-inset-bottom));
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:100%}
+
+  /* hero */
+  .hero{border-radius:14px;padding:15px 16px 14px;margin-bottom:10px;
+    padding-top:calc(15px + env(safe-area-inset-top))}
+  .hero h1{font-size:17px;line-height:1.3;padding-right:96px}
+  .hero p{font-size:11px;line-height:1.45;margin-top:5px}
+  .hero .tag{font-size:9px;right:10px;top:calc(12px + env(safe-area-inset-top));padding:3px 7px}
+
+  /* cards */
+  .card{border-radius:14px;padding:13px 13px;margin-bottom:10px}
+  .card h2{font-size:12px;margin-bottom:10px}
+
+  /* resource grid: 2x2 */
+  .res-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .res{padding:10px 11px;border-radius:12px}
+  .res .ico{font-size:17px}
+  .res .lbl{font-size:10px;margin:4px 0 0}
+  .res .val{font-size:18px}
+  .res .sub{font-size:9.5px}
+
+  /* attrs: 2x2 */
+  .attr-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .attr{padding:8px 9px;gap:8px}
+  .attr .ai{width:28px;height:28px;font-size:14px}
+
+  /* scene */
+  .scene .place{font-size:12.5px}
+  .mode-row{gap:6px}
+  .mode{font-size:11px;padding:7px 11px;min-height:34px}
+
+  /* action grid: 3x2, larger touch targets */
+  .act-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .act{padding:11px 4px;border-radius:12px;min-height:74px}
+  .act .bi{width:36px;height:36px;font-size:18px;margin-bottom:5px}
+  .act .at{font-size:11.5px}
+  .act .ad{font-size:9px;line-height:1.3}
+
+  /* log */
+  .logbox{max-height:210px}
+  .logline{font-size:12px;padding:7px 9px}
+
+  /* modal -> bottom sheet */
+  .mask{padding:0;align-items:flex-end}
+  .modal{
+    max-width:100%;width:100%;max-height:88vh;
+    border-radius:20px 20px 0 0;
+    padding:20px 18px calc(20px + env(safe-area-inset-bottom));
+    animation:sheetUp .22s ease-out;
+  }
+  @keyframes sheetUp{from{transform:translateY(24px);opacity:.6}to{transform:translateY(0);opacity:1}}
+  .modal h3{font-size:17px}
+  .modal .mtext{font-size:13px;padding:12px}
+  /* bigger option buttons for thumb */
+  .opt{padding:14px;border-radius:13px;min-height:54px}
+  .opt .ot{font-size:14px}
+  .opt .od{font-size:12px}
+  /* tabs allow horizontal scroll on narrow screens */
+  .tabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+  .tab{white-space:nowrap;padding:8px 12px;min-height:36px;font-size:12px}
+  .close{width:32px;height:32px}
+  .list-item{padding:11px 12px}
+  .ending-card{padding:14px}
+
+  /* bottom bar visible */
+  .bottom-bar{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:6px;
+    position:fixed;left:0;right:0;bottom:0;z-index:40;
+    padding:8px 8px calc(8px + env(safe-area-inset-bottom));
+    background:rgba(255,255,255,.96);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);
+    box-shadow:0 -2px 14px rgba(31,39,51,.07);
+  }
+  .bb{
+    border:0;background:var(--bg);border-radius:12px;
+    padding:7px 2px 6px;min-height:56px;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    font-family:inherit;color:var(--ink);
+  }
+  .bb .bbi{font-size:19px;line-height:1}
+  .bb .bbt{font-size:10px;font-weight:700;white-space:nowrap}
+  .bb:active{transform:scale(.94)}
+  .bb.primary{background:var(--blue);color:#fff}
+  .bb:disabled{opacity:.45}
+  .foot{display:none}
+}
+
+/* very small screens */
+@media(max-width:360px){
+  .hero h1{font-size:15.5px}
+  .res .val{font-size:16px}
+  .act .bi{width:32px;height:32px;font-size:16px}
+  .act{padding:9px 3px;min-height:68px}
+  .bb .bbi{font-size:17px}
+  .bb .bbt{font-size:9px}
 }
 </style>
 </head>
@@ -231,6 +340,14 @@ body{
   </div>
 
   <div class="foot">纯文字放置小游戏 · 进度自动保存在本机浏览器 · 无氪金无广告</div>
+</div>
+
+<!-- bottom quick bar (mobile) -->
+<div class="bottom-bar">
+  <button class="bb primary" id="bb-work"><span class="bbi">💼</span><span class="bbt">主动展业</span></button>
+  <button class="bb" id="bb-moyu"><span class="bbi">🐟</span><span class="bbt">带薪摸鱼</span></button>
+  <button class="bb" id="bb-bag"><span class="bbi">🎒</span><span class="bbt">背包</span></button>
+  <button class="bb" id="bb-idle"><span class="bbi">🔁</span><span class="bbt" id="bb-idle-t">开挂机</span></button>
 </div>
 
 <!-- event modal -->
@@ -861,6 +978,13 @@ function render(){
   pill.className='idle-pill '+(S.idle?'idle-on':'idle-off');
   document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active',b.dataset.mode===S.mode));
   document.getElementById('a-work').disabled=S.energy<20;
+  // bottom bar sync
+  const bbWork=document.getElementById('bb-work');
+  if(bbWork)bbWork.disabled=S.energy<20;
+  const bbIdleT=document.getElementById('bb-idle-t');
+  if(bbIdleT)bbIdleT.textContent=S.idle?'停挂机':'开挂机';
+  const bbIdle=document.getElementById('bb-idle');
+  if(bbIdle)bbIdle.classList.toggle('primary',!S.idle);
   const lb=document.getElementById('logbox');
   lb.innerHTML=S.log.slice(0,20).map(l=>`<div class="logline ${l.c}"><span class="t">${l.t}</span>${l.m}</div>`).join('');
 }
@@ -872,6 +996,11 @@ document.getElementById('a-tidy').onclick=actTidy;
 document.getElementById('a-idle').onclick=toggleIdle;
 document.getElementById('a-bag').onclick=()=>openPanel('bag');
 document.getElementById('a-task').onclick=()=>openPanel('ach');
+// bottom bar bindings
+document.getElementById('bb-work').onclick=actWork;
+document.getElementById('bb-moyu').onclick=actMoyu;
+document.getElementById('bb-bag').onclick=()=>openPanel('bag');
+document.getElementById('bb-idle').onclick=toggleIdle;
 document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{
   S.mode=b.dataset.mode;log('⚙️ 挂机模式已切换为：'+b.textContent.trim(),'');save();render();
 });
