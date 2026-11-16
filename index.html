@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>重生之我在瑞众保险当牛马</title>
+<style>
+:root{
+  --bg:#f4f6fa; --card:#ffffff; --ink:#1f2733; --sub:#7a8699;
+  --line:#eef1f6; --blue:#2f6bff; --blue-l:#eaf0ff;
+  --green:#16a37a; --green-l:#e6f7f1;
+  --orange:#f0883e; --orange-l:#fff2e8;
+  --purple:#8b5cf6; --purple-l:#f2ecff;
+  --red:#e25656; --red-l:#ffeded;
+  --yellow:#e8a317; --yellow-l:#fff6e0;
+  --shadow:0 2px 14px rgba(31,39,51,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'PingFang SC','Microsoft YaHei','Segoe UI',sans-serif;
+  background:var(--bg); color:var(--ink); line-height:1.6;
+  padding:18px 14px 40px; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:920px;margin:0 auto}
+
+/* header */
+.hero{
+  background:linear-gradient(120deg,#2f6bff,#5b8cff);
+  color:#fff;border-radius:18px;padding:20px 24px;margin-bottom:14px;
+  box-shadow:0 6px 20px rgba(47,107,255,.22);position:relative;overflow:hidden;
+}
+.hero h1{font-size:21px;font-weight:800;letter-spacing:.5px}
+.hero p{font-size:12.5px;opacity:.9;margin-top:3px}
+.hero .tag{position:absolute;right:16px;top:16px;background:rgba(255,255,255,.2);
+  border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600}
+
+/* generic card */
+.card{background:var(--card);border-radius:16px;padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card h2{font-size:13px;color:var(--sub);font-weight:700;letter-spacing:.5px;margin-bottom:12px;
+  display:flex;align-items:center;gap:6px}
+
+/* resource grid */
+.res-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.res{border-radius:14px;padding:12px 13px;position:relative;overflow:hidden}
+.res .ico{font-size:19px;line-height:1}
+.res .lbl{font-size:11px;color:var(--sub);margin:6px 0 1px}
+.res .val{font-size:19px;font-weight:800}
+.res .sub{font-size:10.5px;color:var(--sub);margin-top:2px}
+.res.money{background:var(--yellow-l)}
+.res.energy{background:var(--orange-l)}
+.res.spirit{background:var(--green-l)}
+.res.level{background:var(--blue-l)}
+.bar{height:5px;border-radius:6px;background:rgba(0,0,0,.07);margin-top:7px;overflow:hidden}
+.bar > i{display:block;height:100%;border-radius:6px;transition:width .35s}
+.bar.energy > i{background:var(--orange)}
+.bar.spirit > i{background:var(--green)}
+
+/* attrs */
+.attr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.attr{display:flex;align-items:center;gap:9px;background:var(--bg);border-radius:12px;padding:9px 11px}
+.attr .ai{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:15px;flex:none}
+.attr .an{font-size:11px;color:var(--sub)}
+.attr .av{font-size:15px;font-weight:800}
+
+/* scene bar */
+.scene{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.scene .place{font-size:13.5px;font-weight:700}
+.idle-pill{font-size:11.5px;padding:4px 11px;border-radius:20px;font-weight:700}
+.idle-on{background:var(--green-l);color:var(--green)}
+.idle-off{background:#eef1f6;color:var(--sub)}
+.mode-row{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+.mode{font-size:11.5px;padding:5px 12px;border-radius:20px;border:1px solid var(--line);
+  background:#fff;color:var(--sub);cursor:pointer;font-weight:600;transition:.15s}
+.mode:hover{border-color:var(--blue)}
+.mode.active{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* actions */
+.act-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.act{border:0;background:var(--bg);border-radius:14px;padding:14px 8px;cursor:pointer;
+  text-align:center;transition:.15s;font-family:inherit;color:var(--ink)}
+.act:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(31,39,51,.09)}
+.act .bi{width:42px;height:42px;border-radius:12px;margin:0 auto 8px;display:grid;place-items:center;font-size:20px}
+.act .at{font-size:13px;font-weight:700}
+.act .ad{font-size:10.5px;color:var(--sub);margin-top:2px;line-height:1.4}
+.act:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.b-blue .bi{background:var(--blue-l)} .b-green .bi{background:var(--green-l)}
+.b-orange .bi{background:var(--orange-l)} .b-purple .bi{background:var(--purple-l)}
+.b-yellow .bi{background:var(--yellow-l)} .b-red .bi{background:var(--red-l)}
+
+/* log */
+.logbox{max-height:250px;overflow-y:auto;padding-right:4px}
+.logline{font-size:12.5px;padding:7px 10px;border-radius:9px;margin-bottom:5px;background:var(--bg)}
+.logline .t{color:var(--sub);font-size:10.5px;margin-right:6px}
+.logline.evt{background:var(--yellow-l)}
+.logline.good{background:var(--green-l)}
+.logline.bad{background:var(--red-l)}
+.logline.ach{background:var(--purple-l);font-weight:700}
+
+/* modal */
+.mask{position:fixed;inset:0;background:rgba(20,28,40,.5);display:none;
+  align-items:center;justify-content:center;padding:18px;z-index:50;backdrop-filter:blur(2px)}
+.mask.show{display:flex}
+.modal{background:#fff;border-radius:18px;width:100%;max-width:540px;max-height:86vh;
+  overflow-y:auto;padding:22px;box-shadow:0 18px 50px rgba(0,0,0,.25)}
+.modal .mtag{font-size:11px;font-weight:700;color:var(--blue);background:var(--blue-l);
+  padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:10px}
+.modal h3{font-size:18px;margin-bottom:10px}
+.modal .mtext{font-size:13.5px;color:#4a5566;background:var(--bg);border-radius:12px;
+  padding:13px 15px;margin-bottom:14px}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;
+  cursor:pointer;text-align:left;font-family:inherit;transition:.15s;color:var(--ink)}
+.opt:hover:not(:disabled){border-color:var(--blue);background:var(--blue-l)}
+.opt .ot{font-size:13.5px;font-weight:700}
+.opt .od{font-size:11.5px;color:var(--sub);margin-top:3px}
+.opt:disabled{opacity:.45;cursor:not-allowed}
+.close{float:right;border:0;background:var(--bg);width:28px;height:28px;border-radius:50%;
+  cursor:pointer;font-size:15px;color:var(--sub);line-height:1}
+.mfoot{font-size:11px;color:var(--sub);text-align:center;margin-top:14px}
+
+/* tabs panel */
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tab{font-size:12px;padding:6px 13px;border-radius:9px;border:0;background:var(--bg);
+  cursor:pointer;font-weight:700;color:var(--sub);font-family:inherit}
+.tab.active{background:var(--blue);color:#fff}
+.list-item{background:var(--bg);border-radius:11px;padding:10px 13px;margin-bottom:7px;font-size:12.5px}
+.list-item .li-t{font-weight:700}
+.list-item .li-d{color:var(--sub);font-size:11.5px;margin-top:2px}
+.lock{opacity:.5}
+.ending-card{border-radius:14px;padding:16px;margin-bottom:10px;border:1px solid var(--line)}
+.ending-card.got{background:var(--green-l);border-color:#bfe8d9}
+.ending-card .en{font-size:14px;font-weight:800}
+.ending-card .ec{font-size:11.5px;color:var(--sub);margin:3px 0}
+.ending-card .et{font-size:12px;line-height:1.6}
+
+.foot{text-align:center;font-size:11px;color:var(--sub);margin-top:18px}
+.btn-mini{border:0;background:var(--red-l);color:var(--red);border-radius:8px;
+  padding:5px 12px;font-size:11px;cursor:pointer;font-weight:700;font-family:inherit}
+
+@media(max-width:560px){
+  .res-grid,.attr-grid{grid-template-columns:repeat(2,1fr)}
+  .act-grid{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="tag">🐾 牛马求生系统 v3.2</span>
+    <h1>重生之我在瑞众保险当牛马</h1>
+    <p>上一世累死在工位，这一世——是卷死自己，还是笑着摸鱼？</p>
+  </div>
+
+  <div class="card">
+    <h2>📊 生存状态</h2>
+    <div class="res-grid">
+      <div class="res money">
+        <div class="ico">💰</div>
+        <div class="lbl">工资</div>
+        <div class="val" id="v-money">0</div>
+        <div class="sub">元 · 底薪+佣金</div>
+      </div>
+      <div class="res energy">
+        <div class="ico">⚡</div>
+        <div class="lbl">精力</div>
+        <div class="val" id="v-energy">100<span style="font-size:12px;color:#7a8699">/100</span></div>
+        <div class="bar energy"><i id="b-energy" style="width:100%"></i></div>
+      </div>
+      <div class="res spirit">
+        <div class="ico">🧠</div>
+        <div class="lbl">精神</div>
+        <div class="val" id="v-spirit">100<span style="font-size:12px;color:#7a8699">/100</span></div>
+        <div class="bar spirit"><i id="b-spirit" style="width:100%"></i></div>
+      </div>
+      <div class="res level">
+        <div class="ico">📊</div>
+        <div class="lbl">等级</div>
+        <div class="val" id="v-level">Lv1</div>
+        <div class="sub" id="v-rank">实习牛马</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:9px">
+      <div style="font-size:11px;color:var(--sub);white-space:nowrap">经验</div>
+      <div class="bar" style="flex:1;margin:0"><i id="b-exp" style="width:0%;background:var(--blue)"></i></div>
+      <div style="font-size:11px;color:var(--sub)" id="v-exp">0/60</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎯 四大属性</h2>
+    <div class="attr-grid">
+      <div class="attr"><div class="ai" style="background:var(--blue-l)">🎯</div><div><div class="an">执行力</div><div class="av" id="v-exec">5</div></div></div>
+      <div class="attr"><div class="ai" style="background:var(--green-l)">🔧</div><div><div class="an">专业力</div><div class="av" id="v-prof">5</div></div></div>
+      <div class="attr"><div class="ai" style="background:var(--orange-l)">😊</div><div><div class="an">情商</div><div class="av" id="v-eq">5</div></div></div>
+      <div class="attr"><div class="ai" style="background:var(--purple-l)">🍀</div><div><div class="an">运气</div><div class="av" id="v-luck">5</div></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="scene">
+      <div class="place">📍 <span id="v-scene">瑞众保险办公区</span></div>
+      <div>
+        <span class="idle-pill" id="v-idle">挂机：关闭</span>
+      </div>
+    </div>
+    <div class="mode-row">
+      <span style="font-size:11px;color:var(--sub);align-self:center;margin-right:2px">挂机模式</span>
+      <button class="mode" data-mode="money">💰 赚钱优先</button>
+      <button class="mode active" data-mode="balance">⚖️ 均衡模式</button>
+      <button class="mode" data-mode="spirit">🧘 保精神优先</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎮 可操作选项</h2>
+    <div class="act-grid">
+      <button class="act b-blue" id="a-work"><div class="bi">💼</div><div class="at">主动展业</div><div class="ad">耗精力换高佣金</div></button>
+      <button class="act b-green" id="a-moyu"><div class="bi">🐟</div><div class="at">带薪摸鱼</div><div class="ad">回精神，混点工资</div></button>
+      <button class="act b-orange" id="a-tidy"><div class="bi">🧹</div><div class="at">整理工作</div><div class="ad">3轮内失误率减半</div></button>
+      <button class="act b-purple" id="a-bag"><div class="bi">🎒</div><div class="at">打开背包</div><div class="ad">使用免费道具</div></button>
+      <button class="act b-yellow" id="a-task"><div class="bi">📋</div><div class="at">任务成就</div><div class="ad">看看进度</div></button>
+      <button class="act b-red" id="a-idle"><div class="bi">🔁</div><div class="at">切换挂机</div><div class="ad">开/关自动打工</div></button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📜 职场日志</h2>
+    <div class="logbox" id="logbox"></div>
+  </div>
+
+  <div class="foot">纯文字放置小游戏 · 进度自动保存在本机浏览器 · 无氪金无广告</div>
+</div>
+
+<!-- event modal -->
+<div class="mask" id="m-event"><div class="modal">
+  <span class="mtag" id="e-cat">随机事件</span>
+  <h3 id="e-title"></h3>
+  <div class="mtext" id="e-text"></div>
+  <div class="opts" id="e-opts"></div>
+  <div class="mfoot">选择后立即结算 · 没有绝对最优解</div>
+</div></div>
+
+<!-- panel modal -->
+<div class="mask" id="m-panel"><div class="modal">
+  <button class="close" id="p-close">✕</button>
+  <div class="tabs">
+    <button class="tab active" data-tab="bag">🎒 背包</button>
+    <button class="tab" data-tab="ach">🏆 成就</button>
+    <button class="tab" data-tab="rank">📊 职级</button>
+    <button class="tab" data-tab="end">🏁 结局</button>
+    <button class="tab" data-tab="help">❓ 帮助</button>
+  </div>
+  <div id="p-body"></div>
+</div></div>
+
+<!-- result / ending modal -->
+<div class="mask" id="m-result"><div class="modal" style="text-align:center">
+  <div id="r-content"></div>
+  <button class="opt" id="r-btn" style="margin-top:16px;text-align:center">继续</button>
+</div></div>
+
+<script>
+"use strict";
+/* ============ 常量 ============ */
+const KEY='ruizhong_niuima_save_v1';
+const RANKS=[
+  {lv:1,name:'实习牛马',scene:'瑞众保险办公区'},
+  {lv:5,name:'正式牛马',scene:'瑞众保险业务部'},
+  {lv:12,name:'业务骨干',scene:'瑞众保险绩优专区'},
+  {lv:22,name:'小组负责人',scene:'瑞众保险主任办公室'},
+  {lv:35,name:'部门主管',scene:'瑞众保险营业部'},
+  {lv:50,name:'高层管理',scene:'瑞众保险总监楼层'},
+  {lv:70,name:'隐藏终极身份',scene:'瑞众保险顶层·传说中的办公室'},
+];
+const ITEMS={
+  '冰美式':{ico:'🧊',d:'瞬间恢复40点精力'},
+  '请假条':{ico:'📝',d:'免疫一次强制加班负面事件'},
+  '甩锅宝典':{ico:'📖',d:'人际冲突事件优先规避自身损失'},
+  '摸鱼耳机':{ico:'🎧',d:'挂机期间精神消耗减半（10轮）'},
+  '精修简历':{ico:'📄',d:'跳槽/创业类事件成功率大幅提升'},
+  '领导好感卡':{ico:'💳',d:'考核类事件直接获得正向结果'},
+};
+const TICK=2000; // 每轮2秒
+const OFFLINE_CAP_H=8;
+const EXPBase=lv=>30+lv*15;
+
+/* ============ 30 条随机事件 ============ */
+const EVENTS=[
+{id:1,cat:'职场任务',title:'方案又双叒变了',text:'客户看完计划书："思路挺好，能不能把保额改高、保费改低、还能随时取？" 你看着改了8版的PPT，陷入沉思。',opts:[
+  {t:'微笑接受加班重做',d:'工资+60 精力-25 精神-15 专业力+1',e:{money:60,energy:-25,spirit:-15,prof:1}},
+  {t:'据理力争讲清产品规则',d:'情商判定：成=精神+10 情商+1；败=工资-10 精神-20',c:{k:'eq',ok:{spirit:10,eq:1},no:{money:-10,spirit:-20}}},
+  {t:'截图发群里"请主管确认"',d:'运气判定：成=精神+5；败=情商-1',c:{k:'luck',ok:{spirit:5},no:{eq:-1}}},
+]},
+{id:2,cat:'领导突击检查',title:'主管的脚步声',text:'下午三点，走廊传来熟悉的脚步声。主管探头进来"大家辛苦了"，眼睛却精准锁定你屏幕上还没关的基金K线——你的钱在跌，你的心在滴血。',opts:[
+  {t:'祖传 Alt+Tab 切屏',d:'运气判定：成=精神+5；败=精神-15 工资-10',c:{k:'luck',ok:{spirit:5},no:{spirit:-15,money:-10}}},
+  {t:'主动汇报今日约访量',d:'工资+20 精神-5 情商+1',e:{money:20,spirit:-5,eq:1}},
+  {t:'反向安利"这基金特稳"',d:'情商判定：成=情商+2 精神+10；败=精神-20',c:{k:'eq',ok:{eq:2,spirit:10},no:{spirit:-20}}},
+]},
+{id:3,cat:'同事甩锅',title:'"真不是我的问题"',text:'同事小王凑过来："哥，昨天理赔资料漏了那事，能不能说成你那边交接没给到？就这一次。" 他手里还拎着杯奶茶——这杯奶茶多少钱来着？',opts:[
+  {t:'收下奶茶仗义帮忙',d:'精神-10 情商+1 背锅+1',e:{spirit:-10,eq:1},s:{backpot:1}},
+  {t:'婉拒但帮他一起补资料',d:'精力-15 专业力+1 精神+5',e:{energy:-15,prof:1,spirit:5}},
+  {t:'当众指出真相',d:'情商判定：成=专业力+2 情商-1；败=精神-20',c:{k:'eq',ok:{prof:2,eq:-1},no:{spirit:-20}}},
+]},
+{id:4,cat:'加班通知',title:'周五晚十点的消息',text:'工作群弹出："各位辛苦下，明天来公司冲开门红，不包饭。" 后面跟着一排"收到"，像极了我等人的表情包。',opts:[
+  {t:'默默回"收到"',d:'工资+80 精力-30 精神-20 执行力+1',e:{money:80,energy:-30,spirit:-20,exec:1},s:{overtime:1}},
+  {t:'使用【请假条】免疫',d:'消耗请假条，精神+10',need:'请假条',e:{spirit:10}},
+  {t:'已读不回明天装病',d:'运气判定：成=精神+5；败=精神-15',c:{k:'luck',ok:{spirit:5},no:{spirit:-15}}},
+]},
+{id:5,cat:'团建活动',title:'强制产说会',text:'通知："本周六客户答谢会，全员参加（不参加者周一单独谈话）。" 你看着"全员"两个字，悟了。',opts:[
+  {t:'全程积极参与布场',d:'精神-15 工资+30 情商+2',e:{spirit:-15,money:30,eq:2}},
+  {t:'找借口溜号',d:'运气判定：成=精神+10；败=情商-2 精神-10',c:{k:'luck',ok:{spirit:10},no:{eq:-2,spirit:-10}}},
+  {t:'会上主动上台分享',d:'勇气判定：成=情商+3 签单+1；败=精神-25 运气+1',c:{k:'eq',ok:{eq:3,money:100},no:{spirit:-25,luck:1}}},
+]},
+{id:6,cat:'猎头挖角',title:'深夜私信',text:'猎头私信："您好，有个同业机会薪资翻倍，方便聊聊吗？" 你看了眼自己3000块的底薪条，心动了0.5秒。',opts:[
+  {t:'使用【精修简历】认真聊',d:'消耗简历，成功率大增',need:'精修简历',c:{k:'luck',boost:0.35,ok:{money:5000},no:{spirit:-10}}},
+  {t:'礼貌拒绝专注眼前',d:'精神+5 情商+1 主管好感+',e:{spirit:5,eq:1}},
+  {t:'先套对方公司信息',d:'运气判定：成=下个跳槽事件成功率+20%；败=被拉黑',c:{k:'luck',ok:{money:200},no:{spirit:-5}}},
+]},
+{id:7,cat:'内部调岗',title:'调去后勤档案室',text:'主管找你谈话："公司考虑你的发展，想调你去档案室负责……保单归档。" 你听懂了，这是明升暗降。',opts:[
+  {t:'接受安排佛系养老',d:'精神+15 工资-10 摸鱼+5',e:{spirit:15,money:-10},s:{moyu:5}},
+  {t:'要求留在原团队',d:'情商判定：成=专业力+1 精神+5；败=精神-15',c:{k:'eq',ok:{prof:1,spirit:5},no:{spirit:-15}}},
+  {t:'反向谈判要补偿',d:'运气判定：成=工资+1000；败=情商-1',c:{k:'luck',ok:{money:1000},no:{eq:-1}}},
+]},
+{id:8,cat:'年终考核',title:'年度述职现场',text:'年度考核，你前面那位讲了20分钟"客户经营心得"，主管全程低头玩手机。轮到你了。',opts:[
+  {t:'使用【领导好感卡】',d:'消耗卡片，考核直接通过',need:'领导好感卡',e:{money:2000,prof:1},s:{perfect:1}},
+  {t:'踏踏实实讲业绩数据',d:'专业力判定：成=工资+1500 零失误+1；败=精神-15',c:{k:'prof',ok:{money:1500},no:{spirit:-15},sok:{perfect:1}}},
+  {t:'讲个搞笑段子开场',d:'情商判定：成=全员鼓掌 情商+2；败=冷场 精神-20',c:{k:'eq',ok:{eq:2,money:300},no:{spirit:-20}}},
+]},
+{id:9,cat:'公司变动',title:'优化裁员传闻',text:'茶水间传闻："听说要考核淘汰20%的人。" 每个人都假装淡定，但打卡机前的队伍比往常长了一倍。',opts:[
+  {t:'疯狂表现刷存在感',d:'精力-30 精神-15 执行力+1',e:{energy:-30,spirit:-15,exec:1}},
+  {t:'低调做事明哲保身',d:'精神+5 运气+1',e:{spirit:5,luck:1}},
+  {t:'偷偷更新简历',d:'跳槽事件成功率+15% 精神-5',e:{spirit:-5},f:{resume:1}},
+]},
+{id:10,cat:'摸鱼时机',title:'主管外出的一天',text:'主管发朋友圈："出差三天，信号不好。" 办公室空气突然清新了。',opts:[
+  {t:'光明正大摸鱼追剧',d:'精神+25 工资+5 摸鱼+3',e:{spirit:25,money:5},s:{moyu:3}},
+  {t:'假装忙碌实则刷手机',d:'精神+15，有被抓概率',c:{k:'luck',ok:{spirit:15},no:{spirit:-10},sok:{moyu:2}}},
+  {t:'趁机整理客户名单',d:'精神+10 专业力+1 精力+10',e:{spirit:10,prof:1,energy:10}},
+]},
+{id:11,cat:'职场任务',title:'孤儿单接盘',text:'主管把文件夹拍你桌上："这几个客户前任离职了，你来接。很简单。" 你翻开第一页，发现客户电话是空号。',opts:[
+  {t:'硬着头皮接下',d:'工资+100 精力-35 精神-20 专业力+2',e:{money:100,energy:-35,spirit:-20,prof:2}},
+  {t:'要求交接客户资料',d:'情商判定：成=精力-10 精神+5；败=精神-15',c:{k:'eq',ok:{energy:-10,spirit:5},no:{spirit:-15}}},
+  {t:'转手甩给新人',d:'运气判定：成=省事；败=东窗事发 精神-25',c:{k:'luck',ok:{spirit:5},no:{spirit:-25,eq:-1}}},
+]},
+{id:12,cat:'领导突击检查',title:'早会迟到疑云',text:'打卡显示你今早8:59踩点。主管在群里@你："我们早会几点开始来着？" 全群沉默。',opts:[
+  {t:'承认迟到诚恳道歉',d:'精神-10 工资-30 情商+1',e:{spirit:-10,money:-30,eq:1}},
+  {t:'解释"电梯故障"',d:'运气判定：成=免罚；败=精神-15',c:{k:'luck',ok:{},no:{spirit:-15,money:-20}}},
+  {t:'反手晒昨晚加班回访记录',d:'情商判定：成=功过相抵 精神+5；败=被说"别邀功" 精神-15',c:{k:'eq',ok:{spirit:5},no:{spirit:-15}}},
+]},
+{id:13,cat:'同事甩锅',title:'计划书求助',text:'同事："哥，你计划书做得最好了，帮我改个排版呗，就5分钟。" 你看了眼表，现在已经下午5点58分。',opts:[
+  {t:'帮忙改',d:'精力-10 精神-5 情商+2',e:{energy:-10,spirit:-5,eq:2}},
+  {t:'教他自己做',d:'专业力+1 精神+2 精力-5',e:{prof:1,spirit:2,energy:-5}},
+  {t:'装没看见戴上耳机',d:'精神+8 情商-1',e:{spirit:8,eq:-1}},
+]},
+{id:14,cat:'加班通知',title:'产品停售前夜',text:'凌晨0点，客户发来："听说这产品要停售？能不能帮我保一份？" 你的枕头湿了——是汗。',opts:[
+  {t:'爬起来促成签单',d:'工资+120 精力-40 精神-25 执行力+2',e:{money:120,energy:-40,spirit:-25,exec:2}},
+  {t:'使用【请假条】',d:'消耗请假条，精神+5，客户流失',need:'请假条',e:{spirit:5,money:-50}},
+  {t:'明早再说先睡',d:'精神+15，可能被别家签走',c:{k:'luck',ok:{spirit:15},no:{money:-100,spirit:-10}}},
+]},
+{id:15,cat:'团建活动',title:'早会分享社死',text:'早会主持人："今天轮到谁做成功分享？" 全组目光齐刷刷看向你。你昨天刚被客户拒访三次。',opts:[
+  {t:'真诚分享拒访心得',d:'情商+2 精神+2 全场共鸣',e:{eq:2,spirit:2}},
+  {t:'阴阳怪气地"分享"',d:'运气判定：成=情商+1；败=情商-2',c:{k:'eq',ok:{eq:1},no:{eq:-2,spirit:-5}}},
+  {t:'随便敷衍"还行吧"',d:'精神+5 情商-1',e:{spirit:5,eq:-1}},
+]},
+{id:16,cat:'猎头挖角',title:'同行的橄榄枝',text:'猎头："我们老板很欣赏你在瑞众的客户经营经验。" 你心想：他欣赏的是我回访到几点吧。',opts:[
+  {t:'深入聊薪资',d:'运气判定：成=offer薪资+8000；败=精神-10',c:{k:'luck',ok:{money:8000},no:{spirit:-10}}},
+  {t:'只为打听行情',d:'市场行情+1 精神+2',e:{spirit:2,luck:1}},
+  {t:'当场拒绝表忠心',d:'主管好感+大 工资+500 情商+1',e:{money:500,eq:1}},
+]},
+{id:17,cat:'内部调岗',title:'被发配电话中心',text:'通知：你被调去"客户回访中心"，办公地点在地下室B2，工作内容是每天打200通回访电话。',opts:[
+  {t:'接受并自建话术节奏',d:'精神+10 专业力+2 解锁地下室',e:{spirit:10,prof:2},f:{basement:1}},
+  {t:'找主管哭诉',d:'情商判定：成=调回 精神+5；败=被说抗压差 情商-1',c:{k:'eq',ok:{spirit:5},no:{eq:-1,spirit:-10}}},
+  {t:'把地下室当摸鱼圣地',d:'精神+25 摸鱼+5 工资-15',e:{spirit:25,money:-15},s:{moyu:5}},
+]},
+{id:18,cat:'年终考核',title:'360度互评',text:'同事互评环节，你收到一条匿名评价："该同志优点是能吃苦，缺点是太能吃苦了。" 你陷入哲学思考。',opts:[
+  {t:'使用【领导好感卡】',d:'消耗卡片，考核优秀 工资+2500',need:'领导好感卡',e:{money:2500},s:{perfect:1}},
+  {t:'认真反思写改进计划',d:'专业力+2 精神-5 工资+1000',e:{prof:2,spirit:-5,money:1000}},
+  {t:'匿名互评中好评所有人',d:'情商+3 精神+5 工资+500',e:{eq:3,spirit:5,money:500}},
+]},
+{id:19,cat:'公司变动',title:'换主管了',text:'消息传来：部门换了个90后新主管，据说简介里写着"扁平化管理、拒绝无效加班"。你信了，你又信了。',opts:[
+  {t:'主动自我介绍留好印象',d:'情商+2 工资+200',e:{eq:2,money:200}},
+  {t:'观望不动以静制动',d:'精神+5 运气+1',e:{spirit:5,luck:1}},
+  {t:'试探性问早会能否取消',d:'运气判定：成=精神+10；败=被贴"怕吃苦" 精神-10',c:{k:'luck',ok:{spirit:10},no:{spirit:-10}}},
+]},
+{id:20,cat:'摸鱼时机',title:'无人客户接待室',text:'你路过一间空客户接待室，沙发软，空调足，窗帘还能拉上。这是命运的召唤。',opts:[
+  {t:'进去睡半小时',d:'精神+20 精力+15 摸鱼+2',e:{spirit:20,energy:15},s:{moyu:2}},
+  {t:'用它开个"客户专线"',d:'专业力+1 工资+30 精神-5',e:{prof:1,money:30,spirit:-5}},
+  {t:'叫上同事一起摸鱼',d:'精神+15 情商+2 摸鱼+3',e:{spirit:15,eq:2},s:{moyu:3}},
+]},
+{id:21,cat:'职场任务',title:'客户的奇妙需求',text:'客户："我要那种，既保得多又交得少、生病能赔、没事能返、还能随时退的。" 你默默深呼吸，这不是保险，这是许愿池。',opts:[
+  {t:'耐心引导明确需求',d:'情商+2 专业力+1 精神-5',e:{eq:2,prof:1,spirit:-5}},
+  {t:'直接做三套方案让他选',d:'精力-25 工资+80 精神-10',e:{energy:-25,money:80,spirit:-10}},
+  {t:'把需求原话发群里求支援',d:'运气判定：成=精神+5；败=被当笑话 情商-1',c:{k:'luck',ok:{spirit:5},no:{eq:-1}}},
+]},
+{id:22,cat:'领导突击检查',title:'线上早会事故',text:'线上早会，你忘了关屏幕共享。Everyone saw 你的购物车——三箱咖啡、一双拖鞋、还有一个解压捏捏乐。',opts:[
+  {t:'沉着解释"给团队买福利"',d:'情商判定：成=情商+2；败=社死 精神-20',c:{k:'eq',ok:{eq:2},no:{spirit:-20}}},
+  {t:'立刻切断强装无事',d:'运气判定：成=蒙混过关；败=被截图 精神-15',c:{k:'luck',ok:{},no:{spirit:-15}}},
+  {t:'自嘲化解尴尬',d:'运气判定：成=气氛活跃 情商+2 精神+5；败=冷场 精神-10',c:{k:'luck',ok:{eq:2,spirit:5},no:{spirit:-10}}},
+]},
+{id:23,cat:'同事甩锅',title:'回访录音背锅',text:'同事把一段出错的回访录音"甩"给你："哎呀可能是系统串线了。" 你看着那段明显是他声音的录音，笑了。',opts:[
+  {t:'使用【甩锅宝典】',d:'消耗宝典，完美规避损失 情商+1',need:'甩锅宝典',e:{eq:1,spirit:5}},
+  {t:'公开澄清事实',d:'情商判定：成=专业力+2 情商-1；败=精神-15',c:{k:'eq',ok:{prof:2,eq:-1},no:{spirit:-15}}},
+  {t:'默默背下这口锅',d:'精神-15 工资+50 背锅+1',e:{spirit:-15,money:50},s:{backpot:1}},
+]},
+{id:24,cat:'加班通知',title:'法定节假日值班',text:'通知："国庆期间需轮流值班做客户回访，按三倍计算。" 你算了一下，三倍工资也买不回七天假期啊。',opts:[
+  {t:'主动报名三倍工资',d:'工资+300 精力-40 精神-25 执行力+1',e:{money:300,energy:-40,spirit:-25,exec:1},s:{overtime:1}},
+  {t:'使用【请假条】',d:'消耗请假条，精神+10',need:'请假条',e:{spirit:10}},
+  {t:'抽签听天由命',d:'运气判定：中签=工资+300 精神-20；未中=精神+20 摸鱼+2',c:{k:'luck',ok:{money:300,spirit:-20},no:{spirit:20},sno:{moyu:2}}},
+]},
+{id:25,cat:'团建活动',title:'客户答谢宴劝酒',text:'答谢宴上，客户举杯："小X，不喝就是不给我面子。" 你酒量一杯倒，但这单要是黄了……面子到底值多少钱？',opts:[
+  {t:'硬着头皮喝',d:'精力-20 精神-15 情商+1',e:{energy:-20,spirit:-15,eq:1,money:200}},
+  {t:'以"开车/过敏"婉拒',d:'运气判定：成=精神+5；败=精神-10',c:{k:'luck',ok:{spirit:5},no:{spirit:-10}}},
+  {t:'使用【摸鱼耳机】假装没听见',d:'精神+15 情商-1',need:'摸鱼耳机',e:{spirit:15,eq:-1}},
+]},
+{id:26,cat:'猎头挖角',title:'转型做中介的诱惑',text:'前同事创业开保险代理公司："来当合伙人！期权管够！" 你想了想上辈子的结局，动摇了。',opts:[
+  {t:'使用【精修简历】认真评估',d:'消耗简历，创业成功率大增',need:'精修简历',c:{k:'luck',boost:0.35,ok:{money:20000},no:{spirit:-10},fok:{startup:1}}},
+  {t:'婉拒但保持联系',d:'情商+1 运气+1',e:{eq:1,luck:1}},
+  {t:'小额投资试水',d:'运气判定：成=分红工资+3000；败=亏损工资-2000',c:{k:'luck',ok:{money:3000},no:{money:-2000,spirit:-10}}},
+]},
+{id:27,cat:'内部调岗',title:'主动申请转内勤',text:'你发现公司在招组训岗，工作内容听起来不那么"牛马"。是不是该为自己活一次？',opts:[
+  {t:'提交申请并争取',d:'情商判定：成=工资+800 专业力+1；败=精神-10',c:{k:'eq',ok:{money:800,prof:1},no:{spirit:-10}}},
+  {t:'先打听内部评价',d:'情报+1 精神+2',e:{spirit:2,luck:1}},
+  {t:'算了不折腾',d:'精神+5 运气+1',e:{spirit:5,luck:1}},
+]},
+{id:28,cat:'年终考核',title:'绩优名额之争',text:'部门只有一个"年度绩优"名额。你和另一位同事都达标了。他今晚约你"聊聊"。',opts:[
+  {t:'公平竞争靠业绩',d:'专业力判定：成=工资+3000 情商+1；败=精神-15',c:{k:'prof',ok:{money:3000,eq:1},no:{spirit:-15}}},
+  {t:'使用【领导好感卡】',d:'消耗卡片，直接获评 工资+3000',need:'领导好感卡',e:{money:3000,eq:2},s:{perfect:1}},
+  {t:'主动让贤换人情',d:'情商+3 工资+500',e:{eq:3,money:500}},
+]},
+{id:29,cat:'公司变动',title:'职场大搬迁',text:'支公司宣布搬新写字楼，工位从靠窗变成靠厕所。同事们哀嚎一片，你却在旧工位抽屉里发现了前任留下的"话术秘籍"。',opts:[
+  {t:'研究话术秘籍',d:'专业力+3 运气+1 精神+5',e:{prof:3,luck:1,spirit:5}},
+  {t:'帮忙搬家刷好感',d:'精力-25 情商+2',e:{energy:-25,eq:2}},
+  {t:'借机摸鱼看风景',d:'精神+15 摸鱼+2',e:{spirit:15},s:{moyu:2}},
+]},
+{id:30,cat:'摸鱼时机',title:'周一下午的困意',text:'周一两点，早会那碗鸡汤还没消化，眼皮已经开始打架，咖啡因已失效。',opts:[
+  {t:'去洗手间"深度休息"',d:'精神+15 精力+5 摸鱼+1',e:{spirit:15,energy:5},s:{moyu:1}},
+  {t:'站起来走走假装巡查',d:'精神+10 专业力+1',c:{k:'luck',ok:{spirit:10,prof:1},no:{spirit:-5},sok:{moyu:1}}},
+  {t:'硬扛着打电话',d:'工资+50 精力-20 精神-15 执行力+1',e:{money:50,energy:-20,spirit:-15,exec:1}},
+]},
+];
+
+/* ============ 成就 ============ */
+const ACHS=[
+  {id:'idle50',n:'连续挂机达人',d:'连续挂机50轮',chk:s=>s.stats.consecIdle>=50,r:{exec:1}},
+  {id:'money10k',n:'月薪过万不是梦',d:'累计工资达10000',chk:s=>s.money>=10000,r:{luck:1}},
+  {id:'moyu100',n:'摸鱼大师',d:'摸鱼100次',chk:s=>s.stats.moyu>=100,r:{eq:1}},
+  {id:'perfect10',n:'零失误员工',d:'零失误考核10次',chk:s=>s.stats.perfect>=10,r:{prof:1}},
+  {id:'work50',n:'加班之王',d:'主动加班50次',chk:s=>s.stats.overtime>=50,r:{exec:1}},
+  {id:'good30',n:'人际蝴蝶',d:'客户/人际好评30次',chk:s=>s.stats.good>=30,r:{eq:1}},
+  {id:'kmh3',n:'开门红三连冠',d:'达成开门红壮举3次',chk:s=>s.stats.overtime>=30,r:{exec:2}},
+  {id:'jxlv',n:'继续率达标',d:'专业力达到15',chk:s=>s.prof>=15,r:{prof:2}},
+  {id:'zengyuan',n:'增员达人',d:'情商达到15',chk:s=>s.eq>=15,r:{eq:2}},
+  {id:'anyEnd',n:'轮回觉醒',d:'达成任意结局',chk:s=>!!s.ending,r:{exec:1,prof:1,eq:1,luck:1}},
+];
+
+/* ============ 结局 ============ */
+const ENDS=[
+  {id:'win',n:'升职加薪·人生赢家',c:'晋升至高层管理(Lv50) + 工资≥20000',chk:s=>s.level>=50&&s.money>=20000,t:'你终于坐进了瑞众保险带窗的办公室。窗外风景很好，只是你再也找不回当年那个在工位上改8版计划书的自己了。'},
+  {id:'buddha',n:'佛系养老·岁月静好',c:'等级≥业务骨干 + 精神≥80 + 摸鱼≥100',chk:s=>s.level>=12&&s.spirit>=80&&s.stats.moyu>=100,t:'你成了公司著名的"稳定先生"。不争不抢，准点下班。有人说你没上进心，你笑着说：我上辈子上进了一辈子，这辈子想活着。'},
+  {id:'startup',n:'跳槽创业·王者归来',c:'创业事件成功 + 工资≥15000',chk:s=>s.flags.startup&&s.money>=15000,t:'你离开了瑞众保险。三年后，你的公司开始给瑞众做外包。甲方还是那个甲方，只是这次，你坐在了对面。'},
+  {id:'optimized',n:'被优化·毕业快乐',c:'精神归零持续多轮 或 考核失败3次',chk:s=>s.stats.lowSpirit>=6||s.stats.failCheck>=3,t:'HR微笑着递来信封："感谢你为公司做出的贡献。" 你走出大楼，阳光刺眼。你突然觉得——空气，好像甜了一点。'},
+  {id:'retire',n:'摸鱼退休·带薪养老',c:'摸鱼≥500次 + 等级≥小组负责人',chk:s=>s.stats.moyu>=500&&s.level>=22,t:'你把"带薪摸鱼"做成了一门艺术，并成功带出了一支队伍。公司称你为"最具幸福感员工"，你称自己为——活着。'},
+  {id:'reborn',n:'无限轮回·又是一天',c:'达成任意结局后选择"再来一世"',chk:s=>s.flags.reborn,t:'闹钟响起。工位。工牌。日历：瑞众保险入职第一天。你愣了三秒，然后笑了。"又来？行吧，这次我换个活法。"'},
+  {id:'pot',n:'职场祭司·背锅侠',c:'帮同事背锅≥30次',chk:s=>s.stats.backpot>=30,t:'你成了公司的"免责声明"。所有锅最终都流向你。你获得成就：帮助了全公司的人保住工作。'},
+  {id:'king',n:'卷王之王·过劳传说',c:'主动展业≥300次 + 工资≥30000 + 精神曾≤10',chk:s=>s.stats.work>=300&&s.money>=30000&&s.stats.minSpirit<=10,t:'你成了瑞众保险的传奇。工牌被裱起来挂在走廊，下面写着："他证明了人类可以无限接近机器。" 你没看到那行字，你还在改第9版计划书。'},
+  {id:'guardian',n:'隐藏·瑞众守护神',c:'Lv70 + 四属性全≥15 + 集齐8项成就',chk:s=>s.level>=70&&s.exec>=15&&s.prof>=15&&s.eq>=15&&s.luck>=15&&s.ach.length>=8,t:'你摸透了系统的边界。系统弹出最后一条提示："检测到异常优秀员工，是否接受升职为真·瑞众守护神？" 你点了"是"。这次，轮到你给别人发工资了。'},
+  {id:'flat',n:'隐藏·躺平宗师',c:'连续100轮不主动展业 + 精神满值100',chk:s=>s.stats.noWork>=100&&s.spirit>=100,t:'你什么都不做，却什么都没失去。主管换了三任，同事走了一批又一批，只有你还在座位上，精神饱满地……发呆。系统称你为：职场的最高境界——无所谓。'},
+];
+
+/* ============ 状态 ============ */
+function fresh(){
+  return {
+    money:0,energy:100,spirit:100,exp:0,level:1,
+    exec:5,prof:5,eq:5,luck:5,
+    bag:{'冰美式':1,'请假条':1,'甩锅宝典':0,'摸鱼耳机':0,'精修简历':0,'领导好感卡':0},
+    ach:[], gotEnd:[],
+    stats:{idleTicks:0,moyu:0,work:0,backpot:0,perfect:0,overtime:0,good:0,
+           consecIdle:0,maxMoney:0,lowSpirit:0,failCheck:0,minSpirit:100,noWork:0},
+    flags:{}, mode:'balance', idle:false, lastTick:Date.now(),
+    buffs:{tidy:0,earphone:0}, ending:null, lastEvent:-99, eventCount:0,
+    log:[]
+  };
+}
+let S=fresh();
+
+function load(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw){const d=JSON.parse(raw);S=Object.assign(fresh(),d);
+      S.stats=Object.assign(fresh().stats,d.stats||{});
+      S.buffs=Object.assign(fresh().buffs,d.buffs||{});
+      S.flags=Object.assign({},d.flags||{});
+      S.bag=Object.assign(fresh().bag,d.bag||{});
+    }
+  }catch(e){console.warn('读档失败',e)}
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function log(msg,cls){
+  const d=new Date();
+  const ts=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+  S.log.unshift({t:ts,m:msg,c:cls||''});
+  if(S.log.length>60)S.log.length=60;
+}
+
+/* ============ 计算 ============ */
+function rank(){
+  let r=RANKS[0];
+  for(const x of RANKS) if(S.level>=x.lv) r=x;
+  return r;
+}
+function checkLevelUp(){
+  let up=false;
+  while(S.exp>=EXPBase(S.level)){
+    S.exp-=EXPBase(S.level); S.level++; up=true;
+    log(`🎉 升级！现在是 Lv${S.level} ${rank().name}，解锁新场景：${rank().scene}`,'ach');
+  }
+  if(up){ save(); }
+}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function apply(e){
+  if(!e)return;
+  if(e.money){S.money+=e.money;S.stats.maxMoney=Math.max(S.stats.maxMoney,S.money)}
+  if(e.energy)S.energy=clamp(S.energy+e.energy,0,100);
+  if(e.spirit)S.spirit=clamp(S.spirit+e.spirit,0,100);
+  if(e.exp)S.exp+=e.exp;
+  if(e.exec)S.exec=Math.max(0,S.exec+e.exec);
+  if(e.prof)S.prof=Math.max(0,S.prof+e.prof);
+  if(e.eq)S.eq=Math.max(0,S.eq+e.eq);
+  if(e.luck)S.luck=Math.max(0,S.luck+e.luck);
+  S.stats.minSpirit=Math.min(S.stats.minSpirit,S.spirit);
+  checkLevelUp();
+}
+function applyStats(s){
+  if(!s)return;
+  for(const k in s){ if(typeof s[k]==='number' && k in S.stats) S.stats[k]+=s[k]; }
+}
+function applyFlags(f){ if(f)for(const k in f)S.flags[k]=f[k]; }
+function effectText(e){
+  if(!e)return '';
+  const map={money:'工资',energy:'精力',spirit:'精神',exp:'经验',exec:'执行力',prof:'专业力',eq:'情商',luck:'运气'};
+  const parts=[];
+  for(const k in e){if(map[k]&&e[k])parts.push(`${map[k]}${e[k]>0?'+':''}${e[k]}`)}
+  return parts.join(' ');
+}
+
+/* ============ 挂机 tick ============ */
+function modeGain(){
+  const exBonus=1+S.exec*0.02;
+  let g={money:0,exp:0,energy:0,spirit:0};
+  if(S.mode==='money') g={money:Math.round(40*exBonus),exp:8,energy:-3,spirit:-6};
+  else if(S.mode==='spirit') g={money:Math.round(15*exBonus),exp:5,energy:2,spirit:8};
+  else g={money:Math.round(28*exBonus),exp:7,energy:0,spirit:1};
+  if(S.buffs.earphone>0 && g.spirit<0) g.spirit=Math.ceil(g.spirit/2);
+  return g;
+}
+function doTick(offline){
+  if(!offline){
+    // 精神过低计时
+    if(S.spirit<=0)S.stats.lowSpirit++; else S.stats.lowSpirit=0;
+    // 失误判定（精神<30）
+    let failRate=S.spirit<30?0.4:0;
+    if(S.buffs.tidy>0)failRate/=2;
+    const g=modeGain();
+    let money=g.money;
+    const fail=Math.random()<failRate;
+    if(fail){ money=Math.round(money/2); S.stats.failCheck++; }
+    apply({money,exp:g.exp,energy:g.energy,spirit:g.spirit});
+    S.stats.idleTicks++; S.stats.consecIdle++; S.stats.noWork++;
+    if(S.buffs.tidy>0)S.buffs.tidy--;
+    if(S.buffs.earphone>0)S.buffs.earphone--;
+    // 随机事件
+    if(S.eventCount>=0 && S.stats.idleTicks-S.lastEvent>=12 && Math.random()<0.075){
+      S.lastEvent=S.stats.idleTicks; S.eventCount++;
+      setTimeout(showEvent,300);
+    }
+    checkAch(); checkEnd();
+  }
+  render();
+}
+function offlineGain(){
+  const hours=Math.min((Date.now()-S.lastTick)/3600000,OFFLINE_CAP_H);
+  if(hours<0.02)return;
+  const rounds=Math.floor(hours*3600000/TICK);
+  if(rounds<1)return;
+  const g=modeGain();
+  const money=g.money*rounds;
+  const exp=g.exp*rounds;
+  apply({money,exp});
+  S.stats.idleTicks+=rounds;
+  log(`😴 离线 ${hours.toFixed(1)} 小时，牛马自动搬砖：工资+${money} 经验+${exp}${hours>=OFFLINE_CAP_H?'（已达8小时上限）':''}`,'good');
+}
+function loop(){
+  if(S.idle && !document.querySelector('.mask.show')) doTick(false);
+  S.lastTick=Date.now();
+  save();
+}
+
+/* ============ 事件弹窗 ============ */
+function rollEvent(){
+  const pool=EVENTS;
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+function showEvent(){
+  const ev=rollEvent();
+  const box=document.getElementById('e-opts');
+  document.getElementById('e-cat').textContent='【'+ev.cat+'】';
+  document.getElementById('e-title').textContent=ev.title;
+  document.getElementById('e-text').textContent=ev.text;
+  box.innerHTML='';
+  ev.opts.forEach((op,i)=>{
+    const b=document.createElement('button');
+    b.className='opt';
+    const need=op.need;
+    const has=!need||S.bag[need]>0;
+    b.disabled=!has;
+    b.innerHTML=`<div class="ot">${String.fromCharCode(65+i)}. ${op.t}${need?` <span style="color:#2f6bff">[${ITEMS[need].ico}${need}]</span>`:''}</div>
+      <div class="od">${op.d}${!has?' · 背包中没有该道具':''}</div>`;
+    b.onclick=()=>resolveEvent(ev,op,need);
+    box.appendChild(b);
+  });
+  document.getElementById('m-event').classList.add('show');
+}
+function chance(k,boost){
+  const attr=S[k]||5;
+  let p=0.5 + attr*(k==='luck'?0.03:k==='exec'?0.02:0.04) + (boost||0) + (S.flags.resume?0.15:0);
+  if(S.flags.resume && k==='luck') S.flags.resume=0;
+  return Math.random()<clamp(p,0.05,0.95);
+}
+function resolveEvent(ev,op,need){
+  if(need){S.bag[need]--;}
+  let ok=true, detail='';
+  if(op.c){
+    ok=chance(op.c.k,op.c.boost);
+    apply(ok?op.c.ok:op.c.no);
+    applyStats(ok?op.c.sok:op.c.sno);
+    applyFlags(ok?op.c.fok:op.c.fno);
+    if(op.c.k==='prof'&&!ok)S.stats.failCheck++;
+    if(op.c.k==='eq'&&ok)S.stats.good++;
+    detail=ok?'✅ 判定成功':'❌ 判定失败';
+  }else{
+    apply(op.e);
+  }
+  applyStats(op.s); applyFlags(op.f);
+  if(op.e&&op.e.eq>0)S.stats.good+=1;
+  document.getElementById('m-event').classList.remove('show');
+  const gained=op.e?effectText(op.e):(op.c?effectText(ok?op.c.ok:op.c.no):'');
+  log(`【${ev.title}】${op.t} → ${detail} ${gained}`,ok?'evt':'evt');
+  checkAch(); checkEnd(); save(); render();
+  if(S.ending) showEnding(S.ending);
+}
+
+/* ============ 操作 ============ */
+function actWork(){
+  if(S.energy<20){toastResult('⚡ 精力不足，先摸鱼或休息吧','当前精力低于20，无法主动展业。试试带薪摸鱼或开启挂机恢复。');return}
+  apply({energy:-20,spirit:-5});
+  let money=Math.round(50*(1+S.exec*0.02));
+  let failRate=S.spirit<30?0.4:0;
+  if(S.buffs.tidy>0)failRate/=2;
+  let fail=Math.random()<failRate;
+  if(fail){money=Math.round(money/2);apply({spirit:-10});S.stats.failCheck++;}
+  apply({money,exp:12});
+  S.stats.work++; S.stats.consecIdle=0; S.stats.noWork=0;
+  log(`💼 主动展业${fail?'（精神不济翻车了，佣金减半）':''}：工资+${money} 经验+12`,fail?'bad':'good');
+  checkAch();checkEnd();save();render();
+  if(S.ending)showEnding(S.ending);
+}
+function actMoyu(){
+  apply({spirit:15,energy:5,money:5,exp:2});
+  S.stats.moyu++;
+  let caught=false;
+  if(Math.random()<0.12){apply({spirit:-10});caught=true;}
+  log(`🐟 带薪摸鱼：精神+15 工资+5${caught?'（哎哟，被主管瞥见一眼，精神-10）':''}`,'good');
+  checkAch();checkEnd();save();render();
+  if(S.ending)showEnding(S.ending);
+}
+function actTidy(){
+  apply({energy:-5,spirit:3,exp:3});
+  S.buffs.tidy=3;
+  log('🧹 整理工作：获得【条理】buff，接下来3轮失误率减半','good');
+  save();render();
+}
+function toggleIdle(){
+  S.idle=!S.idle;
+  S.lastTick=Date.now();
+  log(S.idle?'🔁 挂机已开启，牛马开始自动搬砖':'⏸ 挂机已关闭','');
+  save();render();
+}
+
+/* ============ 背包使用 ============ */
+function useItem(name){
+  if(!S.bag[name])return;
+  S.bag[name]--;
+  let msg='';
+  if(name==='冰美式'){apply({energy:40});msg='🧊 冰美式下肚，瞬间清醒：精力+40'}
+  else if(name==='请假条'){msg='📝 请假条已放入背包，将在加班事件中自动免疫'}
+  else if(name==='甩锅宝典'){msg='📖 甩锅宝典已备好，人际冲突事件自动规避'}
+  else if(name==='摸鱼耳机'){S.buffs.earphone=10;msg='🎧 戴上摸鱼耳机，接下来10轮挂机精神消耗减半'}
+  else if(name==='精修简历'){msg='📄 精修简历已备好，跳槽类事件成功率大幅提升'}
+  else if(name==='领导好感卡'){msg='💳 领导好感卡已备好，考核类事件直接正向'}
+  log(msg,'good');
+  save();renderPanel();render();
+}
+
+/* ============ 成就 / 结局检查 ============ */
+function checkAch(){
+  ACHS.forEach(a=>{
+    if(S.ach.indexOf(a.id)<0 && a.chk(S)){
+      S.ach.push(a.id);
+      apply(a.r);
+      log(`🏆 成就达成【${a.n}】：${a.d}！永久属性提升`,'ach');
+    }
+  });
+}
+function checkEnd(){
+  if(S.ending)return;
+  for(const e of ENDS){
+    if(!S.gotEnd.includes(e.id) && e.chk(S)){
+      S.ending=e.id;
+      S.gotEnd.push(e.id);
+      S.flags.reborn=false;
+      apply({exec:1,prof:1,eq:1,luck:1});
+      log(`🏁 达成结局【${e.n}】`,'ach');
+      save();render();
+      setTimeout(()=>showEnding(e),200);
+      break;
+    }
+  }
+}
+function showEnding(e){
+  document.getElementById('r-content').innerHTML=`
+    <div style="font-size:34px;margin-bottom:6px">🏁</div>
+    <div style="font-size:12px;color:#7a8699">达成结局</div>
+    <h3 style="font-size:19px;margin:6px 0 10px">${e.n}</h3>
+    <div class="mtext" style="text-align:left">${e.t}</div>
+    <div style="font-size:11.5px;color:#7a8699">达成条件：${e.c}</div>`;
+  const btn=document.getElementById('r-btn');
+  btn.textContent='再来一世（保留属性，触发轮回结局）';
+  btn.onclick=()=>{
+    document.getElementById('m-result').classList.remove('show');
+    reborn();
+  };
+  document.getElementById('m-result').classList.add('show');
+}
+function reborn(){
+  const keep={exec:S.exec,prof:S.prof,eq:S.eq,luck:S.luck,ach:S.ach,gotEnd:S.gotEnd};
+  const st={moyu:S.stats.moyu,work:S.stats.work,backpot:S.stats.backpot};
+  S=fresh();
+  S.exec=keep.exec;S.prof=keep.prof;S.eq=keep.eq;S.luck=keep.luck;
+  S.ach=keep.ach;S.gotEnd=keep.gotEnd;
+  S.stats.moyu=st.moyu;S.stats.work=st.work;S.stats.backpot=st.backpot;
+  S.flags.reborn=true;
+  log('🔄 一轮轮回结束。闹钟响起，你又站在了瑞众保险的入职第一天……','ach');
+  setTimeout(()=>{checkEnd();save();render();if(S.ending)showEnding(ENDS.find(x=>x.id==='reborn'))},100);
+}
+function toastResult(title,body){
+  document.getElementById('r-content').innerHTML=`<div style="font-size:30px">⚡</div><h3 style="font-size:17px;margin:6px 0">${title}</h3><div style="font-size:12.5px;color:#7a8699">${body}</div>`;
+  const btn=document.getElementById('r-btn');
+  btn.textContent='知道了';
+  btn.onclick=()=>document.getElementById('m-result').classList.remove('show');
+  document.getElementById('m-result').classList.add('show');
+}
+
+/* ============ 面板 ============ */
+function renderPanel(tab){
+  const body=document.getElementById('p-body');
+  let h='';
+  if(tab==='bag'){
+    h='<div style="font-size:11.5px;color:#7a8699;margin-bottom:10px">所有道具免费获取，通过事件/任务/成就掉落。点击使用。</div>';
+    for(const k in ITEMS){
+      const n=S.bag[k];
+      h+=`<div class="list-item ${n?'':'lock'}">
+        <div class="li-t">${ITEMS[k].ico} ${k} <span style="color:#2f6bff">×${n}</span></div>
+        <div class="li-d">${ITEMS[k].d}</div>
+        ${n?`<button class="tab" style="margin-top:7px;background:#2f6bff;color:#fff" data-use="${k}">使用</button>`:''}
+      </div>`;
+    }
+  }else if(tab==='ach'){
+    h='';
+    ACHS.forEach(a=>{
+      const got=S.ach.includes(a.id);
+      h+=`<div class="list-item ${got?'':'lock'}">
+        <div class="li-t">${got?'🏆':'🔒'} ${a.n}</div>
+        <div class="li-d">${a.d} · 奖励：${effectText(a.r)}</div></div>`;
+    });
+    h+=`<div style="font-size:11.5px;color:#7a8699;margin-top:8px">已达成 ${S.ach.length}/${ACHS.length}</div>`;
+  }else if(tab==='rank'){
+    h='';
+    RANKS.forEach(r=>{
+      const cur=S.level>=r.lv;
+      h+=`<div class="list-item ${cur?'':'lock'}">
+        <div class="li-t">${cur?'✅':'🔒'} Lv${r.lv} ${r.name}</div>
+        <div class="li-d">场景：${r.scene}</div></div>`;
+    });
+    h+=`<div class="list-item"><div class="li-d">当前 Lv${S.level} · 距离下一级还需 ${Math.max(0,EXPBase(S.level)-S.exp)} 经验</div></div>`;
+  }else if(tab==='end'){
+    h='<div style="font-size:11.5px;color:#7a8699;margin-bottom:10px">共10种结局，达成后保留记录。点击可查看已达成结局文案。</div>';
+    ENDS.forEach(e=>{
+      const got=S.gotEnd.includes(e.id);
+      h+=`<div class="ending-card ${got?'got':''}" data-end="${e.id}" style="cursor:pointer">
+        <div class="en">${got?'🏁':'❔'} ${got?e.n:'未解锁结局'}</div>
+        <div class="ec">${e.c}</div>
+        ${got?`<div class="et">${e.t}</div>`:''}
+      </div>`;
+    });
+  }else if(tab==='help'){
+    h=`<div style="font-size:12.5px;line-height:1.9;color:#4a5566">
+      <b>玩法说明</b><br>
+      · 开启挂机后，每2秒自动结算一轮，产出工资和经验。<br>
+      · 离线也生效，最多累计8小时收益。<br>
+      · 三种挂机模式：赚钱优先 / 均衡 / 保精神优先。<br>
+      · 精神低于30时失误概率大幅上升；主动打工、整理工作可降低风险。<br>
+      · 挂机中会随机弹出职场事件，选择立即结算，无绝对最优解。<br>
+      · 道具全部免费，从事件/任务/成就获取。<br>
+      · 升级解锁新场景与事件池；达成条件触发10种结局之一。<br>
+      <br><b>存档</b>：自动保存在本机浏览器，换设备不同步。<br>
+      <br><button class="btn-mini" id="reset-btn">⚠ 清空存档重开</button>
+    </div>`;
+  }
+  body.innerHTML=h;
+  body.querySelectorAll('[data-use]').forEach(b=>b.onclick=()=>useItem(b.dataset.use));
+  body.querySelectorAll('[data-end]').forEach(c=>c.onclick=()=>{
+    if(!S.gotEnd.includes(c.dataset.end))return;
+    const e=ENDS.find(x=>x.id===c.dataset.end);
+    toastResult(e.n,e.t);
+  });
+  const rb=document.getElementById('reset-btn');
+  if(rb)rb.onclick=()=>{
+    if(confirm('确定清空存档？此操作不可撤销。')){
+      localStorage.removeItem(KEY);S=fresh();save();render();
+      document.getElementById('m-panel').classList.remove('show');
+      location.reload();
+    }
+  };
+}
+function openPanel(tab){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
+  renderPanel(tab);
+  document.getElementById('m-panel').classList.add('show');
+}
+
+/* ============ 渲染 ============ */
+function render(){
+  document.getElementById('v-money').textContent=S.money.toLocaleString('zh-CN');
+  document.getElementById('v-energy').innerHTML=`${Math.round(S.energy)}<span style="font-size:12px;color:#7a8699">/100</span>`;
+  document.getElementById('v-spirit').innerHTML=`${Math.round(S.spirit)}<span style="font-size:12px;color:#7a8699">/100</span>`;
+  document.getElementById('b-energy').style.width=S.energy+'%';
+  document.getElementById('b-spirit').style.width=S.spirit+'%';
+  document.getElementById('v-level').textContent='Lv'+S.level;
+  document.getElementById('v-rank').textContent=rank().name;
+  document.getElementById('v-exec').textContent=S.exec;
+  document.getElementById('v-prof').textContent=S.prof;
+  document.getElementById('v-eq').textContent=S.eq;
+  document.getElementById('v-luck').textContent=S.luck;
+  document.getElementById('v-scene').textContent=rank().scene;
+  const need=EXPBase(S.level);
+  document.getElementById('b-exp').style.width=clamp(S.exp/need*100,0,100)+'%';
+  document.getElementById('v-exp').textContent=Math.floor(S.exp)+'/'+need;
+  const pill=document.getElementById('v-idle');
+  pill.textContent='挂机：'+(S.idle?'开启中':'关闭');
+  pill.className='idle-pill '+(S.idle?'idle-on':'idle-off');
+  document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active',b.dataset.mode===S.mode));
+  document.getElementById('a-work').disabled=S.energy<20;
+  const lb=document.getElementById('logbox');
+  lb.innerHTML=S.log.slice(0,20).map(l=>`<div class="logline ${l.c}"><span class="t">${l.t}</span>${l.m}</div>`).join('');
+}
+
+/* ============ 事件绑定 ============ */
+document.getElementById('a-work').onclick=actWork;
+document.getElementById('a-moyu').onclick=actMoyu;
+document.getElementById('a-tidy').onclick=actTidy;
+document.getElementById('a-idle').onclick=toggleIdle;
+document.getElementById('a-bag').onclick=()=>openPanel('bag');
+document.getElementById('a-task').onclick=()=>openPanel('ach');
+document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{
+  S.mode=b.dataset.mode;log('⚙️ 挂机模式已切换为：'+b.textContent.trim(),'');save();render();
+});
+document.getElementById('p-close').onclick=()=>document.getElementById('m-panel').classList.remove('show');
+document.querySelectorAll('.tab[data-tab]').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab[data-tab]').forEach(x=>x.classList.toggle('active',x===t));
+  renderPanel(t.dataset.tab);
+});
+['m-event','m-panel','m-result'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',e=>{
+    if(e.target.id===id && id!=='m-result') e.currentTarget.classList.remove('show');
+  });
+});
+
+/* ============ 启动 ============ */
+load();
+offlineGain();
+log('🐾 系统绑定成功。欢迎回到瑞众保险的入职第一天。','');
+checkAch();
+save();render();
+setInterval(loop,TICK);
+</script>
+</body>
+</html>
